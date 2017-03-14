@@ -12,7 +12,7 @@ exports.getAll = function(req, res) {
 };
 
 exports.getById = function(req, res) {
-    Studies.findById(req.params.id, function (err , studie ) {
+    Studies.findById(req.params.id).populate('_reports').exec( function (err , studie ) {
       if ( err ) {
         res.status(500).send(err)
       }
@@ -20,7 +20,10 @@ exports.getById = function(req, res) {
       if( !studie ) {
         res.status(404).send("");
       }
-      res.status(200).json(studie);
+      else {
+        console.log(JSON.stringify(studie, null, "\t"));
+        res.status(200).send( JSON.stringify(studie, null, "\t"));//studie);
+      }
     });
 };
 

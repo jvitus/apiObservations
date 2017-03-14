@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Reports = require('./reports');
 
 var StudiesSchema = new Schema({
   num : { type: String , required : true},
@@ -8,9 +9,9 @@ var StudiesSchema = new Schema({
   customerId : { type: String , required : false},
   location : { type: String , required : false},
   internalCustomerId: { type: String , required : true},
-  reports : [{ type : mongoose.Schema.Types.ObjectId, ref : 'Reports', required : false }]
-}/*,
-{strict : false}*/
+  //_reports : [{ type : mongoose.Schema.Types.ObjectId, ref : 'Reports'}],
+  }
+// {strict : false}
 );
 
 module.exports = mongoose.model('Studies', StudiesSchema);
