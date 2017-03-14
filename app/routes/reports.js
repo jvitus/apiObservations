@@ -1,42 +1,41 @@
 
-var Studies = require('../models/studies');
+var Reports = require('../models/reports');
 
 
 exports.getAll = function(req, res) {
-    Studies.find( function(err,studies) {
+    Reports.find( function(err,reports) {
       if (err) {
         return res.status(500).send(err)
       }
-      res.status(200).json(studies);
+      res.status(200).json(reports);
     })
 };
 
 exports.getById = function(req, res) {
-    Studies.findById(req.params.id, function (err , studie ) {
+    Reports.findById(req.params.id, function (err , report ) {
       if ( err ) {
         res.status(500).send(err)
       }
-      console.log( studie )
-      if( !studie ) {
-        res.status(404).send("");
+      if( !report ) {
+        res.status(404).end();
       }
-      res.status(200).json(studie);
+      res.status(200).json(report);
     });
 };
 
 exports.add = function(req, res) {
-  var studie = new Studies(req.body);
-  studie.save(function(err) {
+  var report = new Reports(req.body);
+  report.save(function(err) {
     if (err) {
       return res.status(503).send(err);
     }
-      res.status(201).send({ "id" : studie._id });
+      res.status(201).send({ "id" : report._id });
   });
 };
 
 
 exports.update = function(req, res) {
-  Studies.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, studie ) {
+  Reports.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, report ) {
     if (err){
       return res.status(500).send(err)
     }
@@ -45,7 +44,7 @@ exports.update = function(req, res) {
 };
 
 exports.deleteIt = function(req, res) {
-  Studies.findByIdAndRemove(req.params.id, req.body, {new: true}, function(err, studie ) {
+  Reports.findByIdAndRemove(req.params.id, req.body, {new: true}, function(err, report ) {
     if (err){
       return res.status(500).send(err)
     }

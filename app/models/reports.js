@@ -1,46 +1,32 @@
-// "use strict";
-//
-//
-// module.exports = function(sequelize, DataTypes) {
-//   var Reports = sequelize.define("Reports",
-//   {
-//     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-//     reportName: { type: DataTypes.STRING, allowNull: false },
-//     worker: { type: DataTypes.STRING, allowNull: false },
-//     date : { type: DataTypes.DATE, allowNull: true, defaultValue: DataTypes.NOW },
-//     begin: { type: DataTypes.STRING, allowNull: true },
-//     exit: { type: DataTypes.STRING, allowNull: true },
-//     diameter: { type: DataTypes.STRING, allowNull: true },
-//     description: { type: DataTypes.STRING, allowNull: true },
-//   },
-//   {
-//     classMethods: {
-//       associate: function(models) {
-//         Reports.belongsTo(models.Studies, {
-//           onDelete: "CASCADE",
-//           foreignKey: {
-//             allowNull: false
-//           }
-//       });
-//     }
-//   }
-// });
-//
-//   return Reports;
-// };
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Studies = require('./studies');
 
 var ReportsSchema = new Schema({
-  reportName : { type: String , required : true},
-  worker: String,
-  date : Date,
-  begin : String,
-  exit: String,
-  diameter: String,
-  description : String
-});
+ reportName : {type : String , required : true },
+ worker : {type : String , required : true },
+ inside : {type : String , required : true },
+ date : {type : Date , required : true },
+ begin : {type : String , required : true },
+ exit : {type : String , required : true },
+ diameter : {type : String , required : true },
+ direction : {type : String , required : false },
+ pipeType : {type : String , required : true },
+ description : {type : String , required : true },
+ fkStudy : {type : String , required : true },
+ observations : [{ type : mongoose.Schema.Types.ObjectId, ref : 'Observations', required : false }]
+}
+);
 
+ReportsSchema.post('validate' , function(req,next) {
+  console.log(req);
+  Studies.findById(req.fkStudy, function(err) {
+    if(err)
+      next(err);
+    else {
+      next();
+    }
+  });
+});
 
 module.exports = mongoose.model('Reports', ReportsSchema);
